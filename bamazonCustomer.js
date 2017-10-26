@@ -214,7 +214,7 @@ function updateProduct(id, amount, newInventory) {
 					var price = i.price;
           			var total = price * amount;
 
-					console.log(customerName + ", your total comes to: $" + total + " USD. \n\n(Press [ENTER] to confirm your purchase.)\n");
+					console.log("\n" + customerName + ", your total comes to: $" + total + " USD. \n");
 					console.log("---------------------------------------------------------------------------------------------------"
 					 + "\n---------------------------------------------------------------------------------------------------\n" 
 					 + "\nCongratulations, " + customerName + ", on your purchase of " + amount + " " + i.product_name + "(s) (Product ID #" + i.id +
