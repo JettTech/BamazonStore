@@ -1,0 +1,26 @@
+{
+  "name": "bamazaon_week12",
+  "version": "1.0.0",
+  "description": "A node app that provides three separate viewing platforms depending on user type: customer, supervisor, or executive.  The customer can view an inventory of items to select for purchase. The supervisor and view and mange inventory through purchase logs.  The executive can view and modify inventory and purchase logs, as well as submit orders for items with low inventory.",
+  "main": "bamazonCustomer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JettTech/BamazonWeek12.git"
+  },
+  "author": "Lisa Jetton",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JettTech/BamazonWeek12/issues"
+  },
+  "homepage": "https://github.com/JettTech/BamazonWeek12#readme",
+  "dependencies": {
+    "cli-table": "^0.3.1",
+    "colors": "^1.1.2",
+    "console.table": "^0.9.1",
+    "inquirer": "^3.3.0",
+    "mysql": "^2.15.0"
+  }
+}

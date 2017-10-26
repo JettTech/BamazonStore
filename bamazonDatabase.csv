@@ -1,0 +1,51 @@
+Number,Product,Department,Price,ID
+1,Football,Fall Sports,15.95,2000
+2,Helmet,Fall Sports,134.99,900
+3,Football Gloves,Fall Sports,40.95,1200
+4,Mouthguard,Fall Sports,13.99,1400
+5,Shoulder Pads,Fall Sports,89.99,2500
+6,Knee Pads,Fall Sports,14.99,1300
+7,Cheer Shorts,Fall Sports,8.99,2000
+8,Compression Shorts,Fall Sports,32.89,2500
+9,Tumble Cheerleading Shoes,Fall Sports,29.95,2000
+10,Cheerleading Gym Mat,Fall Sports,54.99,600
+11,Cheer Backpack,Fall Sports,64.96,350
+12,Snowboard,Winter Sports,290.95,1400
+13,Snowboard Boots,Winter Sports,195.99,1200
+14,Snowboard Bindings,Winter Sports,118.99,480
+15,Snow Helmuts,Winter Sports,69.99,550
+16,Snow Goggles,Winter Sports,39.99,500
+17,Snow Gloves,Winter Sports,60.00,800
+18,Women's Snow Shell Pants,Winter Sports,49.00,1450
+19,Men's Snow Bib,Winter Sports,34.95,900
+20,Women's Snow Jacket,Winter Sports,89.99,1200
+21,Fishing Rod,Wilderness Sports,69.99,1400
+22,Fising Reel,Wilderness Sports,82.99,1200
+23,Fishing Lines,Wilderness Sports,22.96,3200
+24,Waders,Wilderness Sports,89.99,1400
+25,Fishing Baits and Lures,Wilderness Sports,12.00,200
+26,Fishing Boats,Wilderness Sports,699.95,800
+27,Bow Fishing,Wilderness Sports,124.99,200
+28,Compound Bow,Wilderness Sports,289.00,500
+29,Recurve Bow,Wilderness Sports,79.00,300
+30,Archery Sights,Wilderness Sports,143.96,490
+31,Arrow Quiver,Wilderness Sports,45.00,260
+32,Archery Targets,Wilderness Sports,49.96,250
+33,Arrow Rests,Wilderness Sports,49.99,560
+34,Bow Releases,Wilderness Sports,59.99,670
+35,Rifles,Wilderness Sports,379.95,900
+36,Gun Cases,Wilderness Sports,35.96,320
+37,Hunting Bags,Wilderness Sports,49.99,500
+38,Hunting Blinds,Wilderness Sports,99.99,980
+39,Hunting Boots,Wilderness Sports,96.95,1230
+40,Hunting Calls,Wilderness Sports,13.96,800
+41,Hunting Ammo,Wilderness Sports,17.96,3400
+42,Kayaks,Water Sports,235.99,430
+43,Stand Up Boards,Water Sports,1099.99,590
+44,Canoe,Water Sports,849.95,300
+45,Swimsuit,Water Sports,89.99,1200
+46,Wetsuit,Water Sports,65.99,490
+47,Water Shoes,Water Sports,29.99,900
+48,Life Vests,Water Sports,49.99,600
+49,Water Skis,Water Sports,199.95,800
+50,Wakeboards,Water Sports,49.99,900
