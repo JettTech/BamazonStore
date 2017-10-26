@@ -1,5 +1,7 @@
 var mysql = require('mysql');
 var fs = require('fs');
+// var Supervisor = require('bamazonSupervisor.js');
+// var Manager = require('bamazonManager.js');
 var inquirer = require('inquirer');
 // var table = require('console.table');  //don't use this table, when the one below is being used.
 var Table = require('cli-table');
@@ -212,11 +214,12 @@ function updateProduct(id, amount, newInventory) {
 					var price = i.price;
           			var total = price * amount;
 
-					console.log(customerName + ", your total comes to: $" + total + " USD. \n\n(Press [ENTER] to confirm your purchase.)\n\n");
+					console.log(customerName + ", your total comes to: $" + total + " USD. \n\n(Press [ENTER] to confirm your purchase.)\n");
 					console.log("---------------------------------------------------------------------------------------------------"
 					 + "\n---------------------------------------------------------------------------------------------------\n" 
 					 + "\nCongratulations, " + customerName + ", on your purchase of " + amount + " " + i.product_name + "(s) (Product ID #" + i.id +
-					 ") !!  \nBamazon now has " + i.stock_quantity + " units left in our inventory. Would you like to buy some more?\n\nJust remember, when you want to buy on a whim, buy bulk, and buy at Bamazon!\n"
+					 ") !!  \nBamazon now has " + i.stock_quantity + " units left in our inventory. Would you like to buy some more?\n"
+					 +"\nJust remember, whenever you have the urge to shop, shop Bamazon! \nWe are a judgement-free zone and enourage retail-therapy.\n"
 					 + "\n---------------------------------------------------------------------------------------------------"
 					 + "\n---------------------------------------------------------------------------------------------------\n\n");
 				}
@@ -224,102 +227,3 @@ function updateProduct(id, amount, newInventory) {
 	});
 	// console.log("3.) This is the connection SQL query that is currently running: " + query.sql); //ERROR-HANDLING //displays (console.log's) the query that is currently being run...
 }
-
-
-
-
-
-
-
-////////////////////////////////////////////////////////////
-// Option XXXXX  === BUILD OUT PRODUCT INFO.
-function buildProduct() {
-	console.log("Inserting new product: " + product_name + "... \n");
-	var query = connection.query(
-		"INSERT INTO products SET ?", {
-			product_name: product_name, //PRODUCT_NAME GOES HERE, ie: "Swimsuit",
-			department_name: department_name, //DEPARTMENT_NAME GOES HERE, ie: "Summer Sport",
-			price: price, //PRICE GOES HERE, ie: 98.90",
-			stock_quantity: stock_quantity, //PRODUCT_NAME GOES HERE, ie: "2000"
-			id: id
-		},
-		function(error, results){
-			if(error){
-				throw error;
-			}
-
-			console.log(results.affectedRows + " product inserted! \n");
-			updateProduct();
-		}
-	);
-	console.log("This is the connection SQL query that is currently running: " + query.sql) //logs the query that is being currently run...
-};
-
-
-
-// Option xxxxx === DELETE PRODUCT
-function deleteProduct() {
-	console.log("Deleting all " + product_name + ". \n")
-	connection.query(
-		"DELETE FROM products WHERE ?", {
-			id: id, //id GOES HERE, ie: "10",
-		},
-		function(error,results) {
-			if(error){
-				throw error;
-			}
-			console.log(results.affectedRows + " product deleted. \n");
-			readProduct();
-		}
-	);
-}
-
-// Option xxxxx === READ PRODUCT INFO
-function readProduct() {
-	console.log("Selecting all products in inventory... \n");
-	connection.query( //The asterik ('*') represents "ALL"/"EVERYTHING"...
-		"SELECT * FROM products", function(error,results) {
-		if(error){
-			throw error;
-		}
-		console.log(results);
-		connection.end(); //FROM NPM SQL ???!!!!!!!?!??!?!??!????!!!!????
-		}
-	);
-}
-
-////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-
-
-// PART 3 REFERENCE:
-// for (var i = 0; i < bamazondatabase.length; i++) {
-// 		var values = [product_name, price, id];
-// };
-// console.table(['Product', 'Price', 'Product ID'], values); //OR should I use "table", since that is thwat the Variable name is (/has to be be???.. cannot be in ". - notation")
-// This is an example of what the table SHOULD return...
-// name  age
-// ----  ---
-// max   20 
-// joe   30
-
-////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////
-
-// PRODUCT STATE FUNCTIONS....
-
-////////////////////////////////////////////////////////////
-// 
-// 
-
-////REFERENCE:
-// var CURRENT_TIMESTAMP = mysql.raw('CURRENT_TIMESTAMP()');
-// var sql = mysql.format('UPDATE posts SET modified = ? WHERE id = ?', [CURRENT_TIMESTAMP, 42]);
-// console.log(sql); // UPDATE posts SET modified = CURRENT_TIMESTAMP() WHERE id = 42
