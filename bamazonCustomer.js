@@ -2,8 +2,8 @@ var mysql = require('mysql');
 var fs = require('fs');
 // var Supervisor = require('bamazonSupervisor.js');
 // var Manager = require('bamazonManager.js');
+// var table = require('console.table');  //don't use this table, when using the other type of NPM table (cli-Table) below.
 var inquirer = require('inquirer');
-// var table = require('console.table');  //don't use this table, when the one below is being used.
 var Table = require('cli-table');
 
 var connection = mysql.createConnection({
@@ -19,7 +19,8 @@ connection.connect(function(error) {
 		console.log("\nYou have a connetion error. Please reference the following error and diagnose it below. - " + error + "\n");
 		throw error;
 	} 
-	console.log("Connection thread id = " + connection.threadID + ". \n"); //WHY IS THE THEAD stating it is UNDEFINED???
+	// console.log("Connection thread id = " + connection.threadID + ". \n"); //!!!!!WHY IS THE THEAD stating it is UNDEFINED???
+	// console.log("connection successful!");
 	startBamazon(); // asking the user type to determine the inquirer flow;
 });
 
@@ -27,7 +28,7 @@ connection.connect(function(error) {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //PART 1.)
-var customerName;
+var userName;
 ///////////////// INITAL PROMPTS - USER TYPE & PATH DETERMINATION ////////////////////////////// 
 function startBamazon() { //Determines user-type and piping into the appropriate function flow.
     inquirer.prompt({
@@ -46,22 +47,22 @@ function startBamazon() { //Determines user-type and piping into the appropriate
                  		connection.end();
                  	}
                  	else{
-                 		customerName = answers.name;
+                 		userName = answers.name;
                  		inquirer.prompt({
 	                        name: "userType",
 	                        type: "list",
-	                        message: "Hi there, " + customerName + ". Are you a [Customer] a [Manager], or a [Supervisor]?",
+	                        message: "Hi there, " + userName + ". Are you a [Customer] a [Manager], or a [Supervisor]?",
 	                        choices: ["Customer", "Manager", "Supervisor"]
                 		}).then(userType); //
             		}
                  });
             } 
             else {
-                customerName = answers.name;
+                userName = answers.name;
                 inquirer.prompt({
                         name: "userType",
                         type: "list",
-                        message: "Hi there, " + customerName + ". Are you a [Customer] a [Manager], or a [Supervisor]?",
+                        message: "Hi there, " + userName + ". Are you a [Customer] a [Manager], or a [Supervisor]?",
                         choices: ["Customer", "Manager", "Supervisor"]
                 }).then(userType); //
             }
@@ -75,8 +76,7 @@ function userType(answers) { //WHY is this not able to IDENTIFY and ANSWERS pass
 		startCustomer(); // calling our first function in the 'Product State Functions' series created below...
 	} 
 	else if (answers.userType === "Manager") {
-		showTable(); //displayProducts
-	  	//startSupervisor(); -->>> CREATE THIS FUNCTION...
+	  	startManager(); //-->>> CREATE THIS FUNCTION...
 	}
 	else if (answers.userType === "Supervisor") {
 		return;
@@ -89,8 +89,8 @@ function userType(answers) { //WHY is this not able to IDENTIFY and ANSWERS pass
 };
 
 //Part 2.)b)
-function showTable() {
-    console.log("\nHELLO " + customerName + "! Welcome to Bamazon, where you can buy things as quickly as you decide you need them." +
+function showTable(inputCheck) {
+    console.log("\nHELLO " + userName + "! Welcome to Bamazon, where you can buy things as quickly as you decide you need them." +
         "\n Here are the products available today: \n\nNOTE: Please press [CTL + C] at any time to cancel and exit.\n");
     // console.log("I'm inside the showTable function");
     var table = new Table({
@@ -109,7 +109,14 @@ function showTable() {
 	                );
             	}
             	console.log(table.toString());
-            	startCustomer();
+
+            	if (inputCheck === "Manager") {
+			    	console.log("Do you have any additional command? Press [CTR + C] anytime to exit.");
+			    	startManager();
+			    }
+			    else {
+	       			console.log("Press [ENTER] to continue.");
+	       		}
             }
         }
     );
@@ -117,7 +124,8 @@ function showTable() {
 
 
 //PART 3.)
-function startCustomer() {
+function startCustomer(results) { //CAN PASS THRU the results from above, since it was ...included as a CALLBACK!!!!
+    // console.log("the results.length is: " + results.lenght); //WHY is this underfiend IF it is passed through as callback parameter....?!?!?!?!?!!!!!
     inquirer.prompt([{
         name: "customerProductSelect",
         message: "Which product would you like to purchase? \nPlease reference the product by its ID Number (the number in the left-most column). \n", //error-handling
@@ -131,7 +139,7 @@ function startCustomer() {
                 return false;
             } 
             else if (parseInt(input) !== NaN && parseInt(input) <= 50) {
-            	console.log("Your input is returning TRUE....!"); //error-handling
+            	// console.log("Your input is returning TRUE....!"); //error-handling
             	return true;
             }
         }
@@ -151,8 +159,16 @@ function startCustomer() {
 		    			var id =  answers.customerProductSelect;
 		              	var amount = answers.purchaseAmount;
 
-		             	console.log("\nYou have selected " + amount + " items of Product ID #: " + id + ".");
-		                	
+		              	console.log("\nYou have selected " + amount + " items of Product ID #: " + id + ".");
+		              	
+		              	// for (var i of results) { //Why can't this locate results??
+		              	// 	if (i.id === id){
+		              	// 		console.log("this is i.id" + i.id);
+		              	// 		console.log("\nYou have selected " + amount + " items of " + i.product_name
+		              	// 		 + ", which is Product ID #: " + id + ".");
+		              	// 	}
+		              	// }		  
+
 		              	// console.log("You have passed into the answers..."); //error-handling
 		             	checkAmount(id, amount); //this passes into the PART 4.) function below.
 	});
@@ -191,7 +207,6 @@ function checkAmount(id, amount) {
 //  PART 5a.) - displays the full cost of item(s) purchased
 function updateProduct(id, amount, newInventory) {
 	// console.log("Updating the quantity of Product ID #" + id + " in our inventory... \n"); //USER Feed-back.
-	
 	var query = connection.query(
 		"UPDATE products SET ? WHERE ?",
 		[{
@@ -215,14 +230,15 @@ function updateProduct(id, amount, newInventory) {
 					var price = i.price;
           			var total = price * amount;
 
-					console.log("\n" + customerName + ", your total comes to: $" + total + " USD. \n");
+					console.log("\n" + userName + ", your total comes to: $" + total + " USD. \n");
 					console.log("---------------------------------------------------------------------------------------------------"
 					 + "\n---------------------------------------------------------------------------------------------------\n" 
-					 + "\nCongratulations, " + customerName + ", on your purchase of " + amount + " " + i.product_name + "(s) (Product ID #" + i.id +
+					 + "\nCongratulations, " + userName + ", on your purchase of " + amount + " " + i.product_name + "(s) (Product ID #" + i.id +
 					 ") !!  \nBamazon now has " + i.stock_quantity + " units left in our inventory. Would you like to buy some more?\n"
 					 +"\nJust remember, whenever you have the urge to shop, shop Bamazon! \nWe are a judgement-free zone and enourage retail-therapy.\n"
 					 + "\n---------------------------------------------------------------------------------------------------"
-					 + "\n---------------------------------------------------------------------------------------------------\n\n");
+					 + "\n---------------------------------------------------------------------------------------------------\n\n"
+					 + "\nPress [ENTER] or [SPACEBAR] to continue.");
 				}
 			}
 	});
@@ -247,3 +263,183 @@ function continueOn() {
             }
       });
 }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+function startManager(answers) {
+	inquirer.prompt({
+		name: "managerOptions",
+        message: "Which action would you like to take?",
+      	type: "list",
+      	choices: ["View Products for Sale", "View Low Inventory", "Add to Inventory", "Add New Product"]
+	
+	}).then(function(answers) {
+		switch(answers.managerOptions) {
+			case "View Products for Sale": 
+				var inputCheck = "Manager";
+				showTable(inputCheck);
+				break;
+
+			case "View Low Inventory": 
+				lowInventoryView(); //MAKE THIS FUNCTION
+				break;
+
+			case "Add to Inventory": 
+				addStock(); //MAKE THIS FUNCTION
+				break;
+
+			case "Add New Product": 
+				addItem(); //MAKE THIS FUNCTION
+				break;
+		}
+	});
+}
+
+function lowInventoryView() {
+	var lowItems = [];
+	var query = connection.query(
+		"SELECT * FROM products", function(error, results) {
+			if (error) throw error;
+			else {
+				for (var i = 0; i < results.length; i++) {
+					if(results[i].stock_quantity <= 150) {
+						lowItems.push(results[i].product_name);
+					}
+				}
+				var parsedItems = lowItems.toString();
+				if (parsedItems !== []){
+					console.log("\n\nThe following items are funning low: " + parsedItems + ".\n");
+				}
+				else {
+					console.log("\n\nNo itemse are low, at this time.\n");
+				}
+			}
+		}
+	)
+	console.log("\nDo you have any additional command? Press [CTR + C] anytime to exit.");
+	startManager();
+}
+
+/////////////////////////////////////////////////////////
+function addItem() {
+	var id;
+	var query = connection.query(
+		"SELECT * FROM products", function(error, results) {
+			if (error) throw error;
+			else {
+				id = results.length;
+			}
+	});
+	inquirer.prompt([{
+		name: "name",
+		message: "What item would you like to add?",
+		type: "input",
+		},{
+		name: "department",
+		message: "In which department does this item belong?",
+		type: "input",
+		},{
+		name: "price",
+		message: "How much will this item cost?",
+		type: "input",
+		},{
+		name: "stock",
+		message: "What number is the starting inventory?",
+		type: "input",			
+	}]).then(function(answers){
+		var query = connection.query(
+			"INSERT INTO products SET ?",
+			[{
+				product_name: answers.name,
+			},
+			{
+				department_name: answers.department,
+			},
+			{
+				price: answers.price,
+			},
+			{
+				stock_quantity: answers.stock,
+			},
+			{
+				id: id, //so that the new item will be the last number in the array.
+			}],
+			function(error,results) {
+				if(error) throw error;
+			}	
+	)});
+};
+
+function addStock () {
+	var stockItemID;
+	var newAmount;
+	var query = connection.query(
+		"SELECT * FROM products", function(error, results) {
+			if(error) throw error;
+			else{
+				inquirer.prompt([{
+					name: "addStock",
+					message: "To which product would you like to add stock?",
+					type: "input",
+				},{
+					name: "addAmount",
+					message: "How much stock would you like to increase the stock?",
+					type: "input",
+				}]).then(function(answers){
+					// console.log(stockItemID);
+					for (var i in results) {
+						if (i.product_name === answers.addStock) {
+							stockItemID = i.id;
+							console.log("stockItemID = " + stockItemID);
+							newAmount = (answers.addAmount + i.stock_quantity);
+						}
+					}
+					if(stockItemID = undefined) {
+						console.log("Please select a valid and available product in our inventory.");
+					}
+					addUp(stockItemID, newAmount);
+				});
+			}
+		}
+	);
+};
+function addUp(stockItemID, newAmount) {
+	var query = connection.query(
+		"UPDATE products SET ? WHERE ?",
+		[{
+			stock_quantity: newAmount
+		},
+		{
+			id: stockItemID,
+		}],
+		function(error,results) {
+			if(error) throw error;
+		}
+	);
+	console.log("The current stock-quantity for Product ID #" + stockItemID + " is:" + newAmount + ".");
+}
+
+
+
+// function itemSelect(results) {
+// 	inquirer.prompt({
+// 		name: "selectItem",
+//         message: "Which item would you like to select?",
+//       	type: "input"
+// 	}).then(function(answers) {
+// 		for (var i = 0; i < results.length; i++) {
+// 			if(answers.selectItem === results[i].product_name) {
+// 				var id = i;
+// 				var price = results[i].price
+// 				var depart = results[i].department_name;
+// 				var amount = results[i].stock_quantity;
+// 				var product = results[i].product_name;
+
+// 				console.log(id, price, depart, amount, product_name);
+// 				console.log("results[i]" + results[i]);
+// 			}
+// 			else {
+// 				console.log("Please name a valid, available product.");
+// 				startManager();
+// 			}
+// 		}
+// 	});
+// };
