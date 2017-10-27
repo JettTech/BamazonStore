@@ -1,8 +1,5 @@
 var mysql = require('mysql');
 var fs = require('fs');
-// var Supervisor = require('bamazonSupervisor.js');
-// var Manager = require('bamazonManager.js');
-// var table = require('console.table');  //don't use this table, when using the other type of NPM table (cli-Table) below.
 var inquirer = require('inquirer');
 var Table = require('cli-table');
 
@@ -25,8 +22,9 @@ connection.connect(function(error) {
 });
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//CUSTOMER: 
 //PART 1.)
 var userName;
 ///////////////// INITAL PROMPTS - USER TYPE & PATH DETERMINATION ////////////////////////////// 
@@ -264,6 +262,8 @@ function continueOn() {
       });
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
+//MANAGER:
+////PART 1.) 
 function startManager(answers) {
 	inquirer.prompt({
 		name: "managerOptions",
@@ -293,6 +293,8 @@ function startManager(answers) {
 	});
 }
 
+
+////PART 2.) 
 function lowInventoryView() {
 	var lowItems = [];
 	var query = connection.query(
@@ -318,7 +320,7 @@ function lowInventoryView() {
 	startManager();
 }
 
-/////////////////////////////////////////////////////////
+////PART 3.)
 function addItem() {
 	var id;
 	var query = connection.query(
@@ -368,6 +370,7 @@ function addItem() {
 	)});
 };
 
+////PART 4.)
 function addStock () {
 	var stockItemID;
 	var newAmount;
@@ -416,30 +419,3 @@ function addUp(stockItemID, newAmount) {
 	);
 	console.log("The current stock-quantity for Product ID #" + stockItemID + " is:" + newAmount + ".");
 }
-
-
-
-// function itemSelect(results) {
-// 	inquirer.prompt({
-// 		name: "selectItem",
-//         message: "Which item would you like to select?",
-//       	type: "input"
-// 	}).then(function(answers) {
-// 		for (var i = 0; i < results.length; i++) {
-// 			if(answers.selectItem === results[i].product_name) {
-// 				var id = i;
-// 				var price = results[i].price
-// 				var depart = results[i].department_name;
-// 				var amount = results[i].stock_quantity;
-// 				var product = results[i].product_name;
-
-// 				console.log(id, price, depart, amount, product_name);
-// 				console.log("results[i]" + results[i]);
-// 			}
-// 			else {
-// 				console.log("Please name a valid, available product.");
-// 				startManager();
-// 			}
-// 		}
-// 	});
-// };
