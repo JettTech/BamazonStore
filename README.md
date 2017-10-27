@@ -9,7 +9,7 @@ A node app that provides three separate viewing platforms depending on user type
 
 ## Game Play Video
 * This demonstrates the flow of the game.
-![Customer Platfrom Entry](/screenshots/BamazonHW-1stDraft.mp4)
+![Demonstration of the game play and flow.](/screenshots/BamazonHW-1stDraft.mp4)
 Format: ![Alt Text](url)
 
 ## Stage Screenshots

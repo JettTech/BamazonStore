@@ -90,8 +90,8 @@ function userType(answers) { //WHY is this not able to IDENTIFY and ANSWERS pass
 
 //Part 2.)b)
 function showTable() {
-    console.log("\n " + customerName + "! Welcome to Bamazon, where you can buy things as quickly as you decide you need them." +
-        "\n Here are the products available today: \n");
+    console.log("\nHELLO " + customerName + "! Welcome to Bamazon, where you can buy things as quickly as you decide you need them." +
+        "\n Here are the products available today: \n\nNOTE: Please press [CTL + C] at any time to cancel and exit.\n");
     // console.log("I'm inside the showTable function");
     var table = new Table({
 	    	chars: { 'top': '═' , 'top-mid': '╤' , 'top-left': '╔' , 'top-right': '╗'
@@ -185,6 +185,7 @@ function checkAmount(id, amount) {
 			}
 	});
 	// console.log("1.) This is the connection SQL query that is currently running: " + query.sql); //ERROR-HANDLING //displays (console.log's) the query that is currently being run...
+	startCustomer();
 }
 
 //  PART 5a.) - displays the full cost of item(s) purchased
@@ -226,4 +227,23 @@ function updateProduct(id, amount, newInventory) {
 			}
 	});
 	// console.log("3.) This is the connection SQL query that is currently running: " + query.sql); //ERROR-HANDLING //displays (console.log's) the query that is currently being run...
+	
+	continueOn(); //WHY DOES THIS BRING BACK THE DOUBLING ERRORS /BUGS????
+	// showTable(); //WHY DOES passing this func here, reduce the doubling bugs????
+}
+
+function continueOn() {
+	inquirer.prompt({
+        name: "continueOn",
+        type: "confirm",
+        message: "Would you like to continue buying? Press [Y] for'Yes', and [N] for 'No.'\n",
+    }).then(function(answers){
+       		if (answers.continueOn !== true) { 
+               	console.log("Take care. See you again soon!");
+                connection.end(showTable);
+            } 
+            else {   
+            	showTable();
+            }
+      });
 }
