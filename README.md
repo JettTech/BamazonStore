@@ -11,9 +11,6 @@ A node app that provides three separate viewing platforms depending on user type
 ![](https://media.giphy.com/media/3ohhwqps0apDj0l17i/giphy.gif)
 
 
-## Game Play Video
-* This demonstrates the flow of the game.
-
 ## Stage Screenshots
 * User Verification 
 ![Customer Platfrom Entry](/screenshots/customer-entry.png)
